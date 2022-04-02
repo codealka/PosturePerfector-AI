@@ -51,16 +51,24 @@ class poseDetector():
         if self.results.pose_landmarks:
             for id, lm in enumerate(self.results.pose_landmarks.landmark): # id = point number , lm = landmark
                 h,w,c = img.shape
-                cx , cy  = int(lm.x*w) , int(lm.y*h) #x  and y coordinates (pixels)
+                cx , cy  = round(lm.x,2) , round(lm.y,2) #x  and y coordinates (pixels)
                 lmList.append([id,cx,cy])
+                cx,cy = int(lm.x*w) , int(lm.y*h)
                 if draw:
-                    cv2.circle(img, (cx,cy),5,(255,0,0),cv2.FILLED) # will create blobs on the landmarks
+                     cv2.circle(img, (cx,cy),10,(255,0,0),cv2.FILLED) # will create blobs on the landmarks
+
         return lmList
 
 
 
 
 def main():
+
+
+
+
+
+
     cap = cv2.VideoCapture('Videos/aboody.mp4')
     pTime = 0  # previous time
     detector = poseDetector()
