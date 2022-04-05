@@ -124,7 +124,9 @@ while True:
 
     if VD < Nose_Chest_distance:
         angle = (math.acos(VD/Nose_Chest_distance))*180/math.pi
-        cv2.putText(img,'Head forward tilt in Degrees: ' + str(int(angle)), (70, 100), cv2.FONT_HERSHEY_PLAIN, 3, (0, 255, 0), 3)
+
+        if angle>20:
+            cv2.putText(img,'Head forward tilt in Degrees: ' + str(int(angle)), (70, 100), cv2.FONT_HERSHEY_PLAIN, 3, (0, 0, 255), 3)
 
 
 
@@ -133,7 +135,8 @@ while True:
     Nose_x = Nose[1]
     OFF_centre_d = Nose_x - Chest_x # if d > 0 then right tilt , if d < 0 then left tilt
     angle1 = math.asin(OFF_centre_d/VD)*180/math.pi
-    cv2.putText(img, 'Off centre head angle: ' + str(int(angle1)), (70, 200), cv2.FONT_HERSHEY_PLAIN, 3, (0, 255, 0), 3)
+    if abs(angle1) > 10:
+        cv2.putText(img, 'Off centre head angle: ' + str(int(angle1)), (70, 200), cv2.FONT_HERSHEY_PLAIN, 3, (0, 255, 0), 3)
 
 
     # shoulders tilt:
