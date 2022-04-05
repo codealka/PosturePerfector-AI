@@ -2,6 +2,7 @@ import cv2
 import mediapipe as mp # Mediapipe uses RGB
 import time
 
+
 class poseDetector():
 
     def __init__(self, mode = False , complexity = 1, smooth = True ,
@@ -51,11 +52,13 @@ class poseDetector():
         if self.results.pose_landmarks:
             for id, lm in enumerate(self.results.pose_landmarks.landmark): # id = point number , lm = landmark
                 h,w,c = img.shape
-                cx , cy  = round(lm.x,2) , round(lm.y,2) #x  and y coordinates (pixels)
-                lmList.append([id,cx,cy])
+                cx , cy , cz  = round(lm.x,2) , round(lm.y,2) , round(lm.z*-1,2) #x  and y coordinates (pixels)
+                lmList.append([id,cx,cy,cz])
                 cx,cy = int(lm.x*w) , int(lm.y*h)
                 if draw:
                      cv2.circle(img, (cx,cy),10,(255,0,0),cv2.FILLED) # will create blobs on the landmarks
+        else:
+            print('Could not find Position')
 
         return lmList
 
