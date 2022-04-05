@@ -56,7 +56,7 @@ class poseDetector():
                 lmList.append([id,cx,cy,cz])
                 cx,cy = int(lm.x*w) , int(lm.y*h)
                 if draw:
-                     cv2.circle(img, (cx,cy),5,(255,0,0),cv2.FILLED) # will create blobs on the landmarks
+                     cv2.circle(img, (cx,cy),8,(255,0,0),cv2.FILLED) # will create blobs on the landmarks
         else:
             print('Could not find Position')
 
