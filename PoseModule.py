@@ -34,15 +34,13 @@ def Calibrate_app(camera):
 
     cam = cv2.VideoCapture(camera)
 
-
-
     empty = st.empty()
-
-    button = empty.checkbox("Calibrate picture")
+    button = empty.checkbox("Calibrate posture by clicking here")
 
     while Calibrate:
         ret, img = cam.read()
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
         img_calibrate.image(img)
 
         if button:
@@ -52,30 +50,20 @@ def Calibrate_app(camera):
             print("{} written!".format(img_name))
             empty.empty()
 
+    # getting calibration data
+    detector = poseDetector()
+    img = detector.findPose(img)
+    lmList = detector.findPosition(img)
 
+    # -----------------------------------------------------------------------------------
+    # -----------------------------------------------------------------------------------
+    Chest = halfwaypoint(lmList[11], lmList[12])
+    nose = lmList[0]
+    NCVD = Chest[2] - nose[2]  # Nose to chest vertical distance
+    NCVD_benchmark = NCVD
 
+    return NCVD_benchmark
 
-
-
-
-
-    #
-    #
-    # # getting calibration data
-    # detector = poseDetector()
-    # img = detector.findPose(frame)
-    # lmList = detector.findPosition(img)
-    #
-    # # -----------------------------------------------------------------------------------
-    # # -----------------------------------------------------------------------------------
-    # Chest = halfwaypoint(lmList[11], lmList[12])
-    # nose = lmList[0]
-    # NCVD = Chest[2] - nose[2]  # Nose to chest vertical distance
-    # NCVD_benchmark = NCVD
-    #
-    # return NCVD_benchmark
-
-    return img_calibrate
 
 def Calibrate_picture(camera):
     cam = cv2.VideoCapture(camera)
