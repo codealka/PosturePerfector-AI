@@ -15,7 +15,7 @@ class VideoProcessor:
 
         return av.VideoFrame.from_ndarray(self.img, format('bgr24'))
 
-    def Analysis(self):
+    def Analysis(self,img):
         lmList = detector.findPosition(self.img)
 
         return lmList

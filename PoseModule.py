@@ -2,6 +2,124 @@ import cv2
 import mediapipe as mp # Mediapipe uses RGB
 import time
 
+import streamlit as st
+
+
+def Shouldertilt(y1,y2):
+
+    PD = ((y1 - y2)/y2)*100 # percentage difference
+    if PD > 5:
+        return 0
+    if PD < -5:
+        return 1
+
+    # 1 -> Spine curved rightwards (
+    # 0 -> spine curved leftwards )
+
+def halfwaypoint(tuple1,tuple2):
+    # each tuple has 4 entries id,x,y,z
+
+    half = [(tuple1[0]+tuple2[0])/2,
+            (tuple1[1]+tuple2[1])/2,
+            (tuple1[2]+tuple2[2])/2,
+            (tuple1[3]+tuple2[3])/2]
+
+    return half
+
+
+def Calibrate_app(camera):
+
+    Calibrate = True
+    img_calibrate = st.image([])
+
+    cam = cv2.VideoCapture(camera)
+
+
+
+    empty = st.empty()
+
+    button = empty.checkbox("Calibrate picture")
+
+    while Calibrate:
+        ret, img = cam.read()
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        img_calibrate.image(img)
+
+        if button:
+            Calibrate = False
+            img_name = "Calibrate.jpg"
+            cv2.imwrite(img_name, img)
+            print("{} written!".format(img_name))
+            empty.empty()
+
+
+
+
+
+
+
+
+    #
+    #
+    # # getting calibration data
+    # detector = poseDetector()
+    # img = detector.findPose(frame)
+    # lmList = detector.findPosition(img)
+    #
+    # # -----------------------------------------------------------------------------------
+    # # -----------------------------------------------------------------------------------
+    # Chest = halfwaypoint(lmList[11], lmList[12])
+    # nose = lmList[0]
+    # NCVD = Chest[2] - nose[2]  # Nose to chest vertical distance
+    # NCVD_benchmark = NCVD
+    #
+    # return NCVD_benchmark
+
+    return img_calibrate
+
+def Calibrate_picture(camera):
+    cam = cv2.VideoCapture(camera)
+    cv2.namedWindow("Calibration")
+    img_counter = 0
+
+    while img_counter<1:
+        ret, frame = cam.read()
+        if not ret:
+            print("failed to grab frame")
+            break
+        cv2.imshow("test", frame)
+
+        k = cv2.waitKey(1)
+
+        if k % 256 == 32:
+            # SPACE pressed
+            img_name = "Calibrate.jpg"
+            cv2.imwrite(img_name, frame)
+            print("{} written!".format(img_name))
+            img_counter += 1
+
+    cam.release()
+    cv2.destroyAllWindows()
+
+    #getting calibration data
+    detector = poseDetector()
+    img = detector.findPose(frame)
+    lmList = detector.findPosition(img)
+
+
+#-----------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------
+    Chest = halfwaypoint(lmList[11],lmList[12])
+    nose = lmList[0]
+    NCVD =  Chest[2] - nose[2] #Nose to chest vertical distance
+    NCVD_benchmark = NCVD
+
+
+
+
+    return NCVD_benchmark
+
+
 
 class poseDetector():
 
