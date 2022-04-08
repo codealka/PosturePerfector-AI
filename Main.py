@@ -2,6 +2,9 @@ import cv2
 import time
 import PoseModule as pm
 import math
+import numpy as np
+import matplotlib.pyplot as plt
+
 
 camera = 1 # camera used ( 0 = native camera , 1 = added webcam)
 
@@ -14,8 +17,14 @@ cap = cv2.VideoCapture(camera)
 pTime = 0  # previous time
 detector = pm.poseDetector()
 
+Nose_Chest_angle = []
+# OFF_centre_angle = []
+# Spine_curvature = []
 
-while True:
+duration = 60*int(input("How long do you want to run a session for (in minutes)?"))
+run_time = time.time() + duration
+
+while time.time() < run_time:
     success, img = cap.read()
     img = detector.findPose(img)
     lmList = detector.findPosition(img)
@@ -48,10 +57,13 @@ while True:
 
     if VD < Nose_Chest_distance:
         angle = (math.acos(VD/Nose_Chest_distance))*180/math.pi
+        Nose_Chest_angle.append(angle)
 
         if angle>20:
             cv2.putText(img,'Head forward tilt in Degrees: ' + str(int(angle)), (70, 100), cv2.FONT_HERSHEY_PLAIN, 3, (0, 0, 255), 3)
 
+    else:
+        Nose_Chest_angle.append(0)
 
 
     # Head Side to side tilt:
@@ -75,13 +87,17 @@ while True:
 
 
 
-
-
-
-
-
-
-
-
     cv2.imshow('Image', img)
     cv2.waitKey(1)  # 1ms delay
+
+else:
+
+    length = len(Nose_Chest_angle) # number of samples
+    samplingRate = length/duration # duration in seconds
+    ticks = np.arange(0, length, int(samplingRate))
+    seconds =  np.arange(0,duration+1)
+
+    print (len(ticks),len(seconds))
+    plt.plot(Nose_Chest_angle, color = 'r')
+    plt.xticks( ticks , seconds)
+    plt.show()
