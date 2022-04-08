@@ -22,6 +22,9 @@ else:
 
 #main code
 
+
+
+
 st.subheader("Calibration is used to tailor the system for you")
 Benchmark = pm.Calibrate_app(camera)
 detector = pm.poseDetector()
@@ -145,4 +148,6 @@ while run and time.time()<run_time:
         #     cv2.putText(img, 'Spine Curved Rightwards', (70, 150), cv2.FONT_HERSHEY_PLAIN, 3, (0, 255, 0), 3)
 
         FRAME_WINDOW.image(img)
+
+
 

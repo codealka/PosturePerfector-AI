@@ -9,9 +9,11 @@ def Shouldertilt(y1,y2):
 
     PD = ((y1 - y2)/y2)*100 # percentage difference
     if PD > 5:
-        return 0
-    if PD < -5:
+        return -1
+    elif PD < -5:
         return 1
+    else:
+        return 0
 
     # 1 -> Spine curved rightwards (
     # 0 -> spine curved leftwards )
