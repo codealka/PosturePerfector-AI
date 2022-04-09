@@ -42,7 +42,6 @@ def Calibrate_app(camera):
     while Calibrate:
         ret, img = cam.read()
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-
         img_calibrate.image(img)
 
         if button:
@@ -165,10 +164,12 @@ class poseDetector():
                 cx,cy = int(lm.x*w) , int(lm.y*h)
                 if draw:
                      cv2.circle(img, (cx,cy),8,(255,0,0),cv2.FILLED) # will create blobs on the landmarks
+            return lmList
         else:
             print('Could not find Position')
+            return(False)
 
-        return lmList
+
 
 
 

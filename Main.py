@@ -4,6 +4,7 @@ import PoseModule as pm
 import math
 import numpy as np
 import matplotlib.pyplot as plt
+from playsound import playsound
 
 
 camera = 1 # camera used ( 0 = native camera , 1 = added webcam)
@@ -61,11 +62,17 @@ while time.time() < run_time:
     if VD <= Nose_Chest_distance:
         angle = (math.acos(VD / Nose_Chest_distance)) * 180 / math.pi
         cv2.putText(img, 'Head forward tilt in Degrees: ' + str(int(angle)), (70, 100), cv2.FONT_HERSHEY_PLAIN, 3,(0, 0, 255), 3)
+        if angle > 20:
+            playsound('Sounds/DataScanner.wav')
+            print('playing sound using  playsound')
+
+
         if angle > Cutoff_forward:
             Nose_Chest_angle.append(Cutoff_forward)
             cv2.putText(img,'Head forward tilt in Degrees: ' + str(int(angle)), (70, 100), cv2.FONT_HERSHEY_PLAIN, 3, (0, 0, 255), 3)
         else:
             Nose_Chest_angle.append(angle)
+
 
     else:
         angle = -((math.acos(Nose_Chest_distance/VD)) * 180 / math.pi)
