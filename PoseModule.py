@@ -1,8 +1,8 @@
 import cv2
 import mediapipe as mp # Mediapipe uses RGB
 import time
-
 import streamlit as st
+
 
 
 def Shouldertilt(y1,y2):
@@ -36,8 +36,15 @@ def Calibrate_app(camera):
 
     cam = cv2.VideoCapture(camera)
 
+    text = st.empty()
+    text.write('Make sure: \n'
+               ' * your head is at the centre of the frame \n'
+               ' * your shoulders are visible \n '
+               ' * nothing is obstructing your body view \n')
+
     empty = st.empty()
     button = empty.checkbox("Calibrate posture by clicking here")
+
 
     while Calibrate:
         ret, img = cam.read()
@@ -50,6 +57,7 @@ def Calibrate_app(camera):
             cv2.imwrite(img_name, img)
             print("{} written!".format(img_name))
             empty.empty()
+            text.empty()
 
     # getting calibration data
     detector = poseDetector()
@@ -63,7 +71,14 @@ def Calibrate_app(camera):
     NCVD = Chest[2] - nose[2]  # Nose to chest vertical distance
     NCVD_benchmark = NCVD
 
-    return NCVD_benchmark
+    # -----------------------------------------------------------------------------------
+    # -----------------------------------------------------------------------------------
+    #Slouching
+    shoulderWIDTH = lmList[12][1]-lmList[11][1]
+
+    return NCVD_benchmark , shoulderWIDTH
+
+
 
 
 def Calibrate_picture(camera):

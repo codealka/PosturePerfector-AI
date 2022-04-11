@@ -7,6 +7,7 @@ from playsound import playsound
 import matplotlib.pyplot as plt
 import numpy as np
 
+sounds = 'Sounds/DataScanner.wav'
 
 def app():
 
@@ -36,6 +37,7 @@ def app():
     Nose_Chest_angle = []
     OFF_centre_angle = []
     Spine_curvature = []
+    slouching = []
 
 
 
@@ -75,7 +77,6 @@ def app():
 
             col1, col2, col3, col4= statbox.columns(4)
 
-            col1.metric("FPS", fps)
 
             if lmList == False: # can not detect position
 
@@ -88,8 +89,11 @@ def app():
                 Spine_curvature.append(1)
                 Spine_curvature.append(-1)
 
+                slouching.append(1)
+                slouching.append(0)
+
                 col1, col2, col3, col4 = statbox.columns(4)
-                col1.metric("FPS", fps)
+                col1.metric("Slouching", 'N/A')
                 col2.metric('Head angle' , 'N/A')
                 col3.metric('Neck Sideways Tilt', 'N/A')
                 col4.metric('Spinal Curvature', 'N/A')
@@ -97,7 +101,33 @@ def app():
 
 
             else:
+
+
                 # to track specific points we can look at lmlist['point index']
+
+                #Slouching
+
+                ShoulderWidth = Benchmark[1]
+                ShoulderWidth_RT = lmList[12][1]-lmList[11][1]
+
+                percent_increase = ((ShoulderWidth_RT-ShoulderWidth)/ShoulderWidth)*100
+
+                if percent_increase > 5:
+                    slouching.append(1)
+                    col1, col2, col3, col4 = statbox.columns(4)
+                    col1.metric("Slouching", 'Yes')
+                    playsound(sounds)
+                else:
+                    slouching.append(0)
+                    col1, col2, col3, col4 = statbox.columns(4)
+                    col1.metric("Slouching", 'No')
+
+
+
+
+
+
+
                 # Nose
                 Nose = lmList[0]
 
@@ -106,15 +136,15 @@ def app():
 
                 # Nose to chest:
                 VD = Chest[2] - Nose[2]  # vertical distance nose to chest ( real time)
-                Nose_Chest_distance = Benchmark  # calibrated Nose to chest distance
+                Nose_Chest_distance = Benchmark[0]  # calibrated Nose to chest distance
 
                 Cutoff_forward = 60
                 Cutoff_backward = -30
 
                 if VD <= Nose_Chest_distance:
                     angle = (math.acos(VD / Nose_Chest_distance)) * 180 / math.pi
-                    if angle > 20:
-                        playsound('Sounds/DataScanner.wav')
+                    if angle > 30:
+                        playsound(sounds)
                     if angle > Cutoff_forward:
                         Nose_Chest_angle.append(Cutoff_forward)
                         col1, col2, col3, col4 = statbox.columns(4)
@@ -128,6 +158,10 @@ def app():
                     angle = -((math.acos(Nose_Chest_distance / VD)) * 180 / math.pi)
                     col1, col2, col3, col4 = statbox.columns(4)
                     col2.metric("Head angle", str(int(angle)) + '°')
+
+                    if angle < -15:
+                        playsound(sounds)
+
                     if angle < Cutoff_backward:
                         Nose_Chest_angle.append(Cutoff_backward)
                         col1, col2, col3, col4 = statbox.columns(4)
@@ -158,6 +192,8 @@ def app():
                         col3.metric("Neck Sideways Tilt", str(angle1) + '°' )
                         OFF_centre_angle.append(angle1)
 
+                if abs(angle1) > 10:
+                    playsound(sounds)
 
                 # shoulders tilt:
                 y1 = lmList[11][2]  # left shoulder y position
@@ -168,9 +204,11 @@ def app():
                 if ST == -1:
                     col1, col2, col3, col4 = statbox.columns(4)
                     col4.metric("Spinal Curvature", "L" )
+                    playsound(sounds)
                 elif ST == 1:
                     col1, col2, col3, col4 = statbox.columns(4)
                     col4.metric("Spinal Curvature", "R")
+                    playsound(sounds)
                 else:
                     col1, col2, col3, col4 = statbox.columns(4)
                     col4.metric("Spinal Curvature", "N")
@@ -207,12 +245,12 @@ def app():
             plt.axhline(y=-15, color='y', linestyle='-',label='Lower Threshold')
             plt.legend(['Real-time Angle', "Upper Limit", "Lower Limit"], loc="lower right")
             plt.xlabel('Time(s)')
-            plt.ylabel('Neck tilt Angle (degrees)')
+            plt.ylabel('Head Angle (degrees)')
             st.pyplot(fig1)
 
             #neck off centre angle
             fig2 = plt.figure()
-            plt.title('Neck Off Centre Angle')
+            plt.title('Head Off-Centre Angle')
             plt.plot(OFF_centre_angle, color = 'b')
             plt.xticks( ticks , seconds)
             plt.xlim(xmin=0)
@@ -233,5 +271,15 @@ def app():
             plt.xlabel('Time(s)')
             plt.ylabel('Spine curvature direction')
             st.pyplot(fig3)
+
+            fig4 = plt.figure()
+            plt.title('Slouching')
+            plt.plot(Spine_curvature, color='b')
+            plt.xticks(ticks, seconds)
+            plt.yticks([0, 1], ['NO','YES'])
+            plt.xlim(xmin=0)
+            plt.xlabel('Time(s)')
+            plt.ylabel('Slouching')
+            st.pyplot(fig4)
 
 

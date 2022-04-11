@@ -9,7 +9,7 @@ from playsound import playsound
 
 camera = 1 # camera used ( 0 = native camera , 1 = added webcam)
 
-
+sounds = '/Users/saidalkathairi/PycharmProjects/UOBIRP2022/Sounds/DataScanner.wav'
 
 #main code
 
@@ -62,9 +62,8 @@ while time.time() < run_time:
     if VD <= Nose_Chest_distance:
         angle = (math.acos(VD / Nose_Chest_distance)) * 180 / math.pi
         cv2.putText(img, 'Head forward tilt in Degrees: ' + str(int(angle)), (70, 100), cv2.FONT_HERSHEY_PLAIN, 3,(0, 0, 255), 3)
-        if angle > 20:
-            playsound('Sounds/DataScanner.wav')
-            print('playing sound using  playsound')
+        if angle > 30:
+            playsound(sounds)
 
 
         if angle > Cutoff_forward:
@@ -77,6 +76,9 @@ while time.time() < run_time:
     else:
         angle = -((math.acos(Nose_Chest_distance/VD)) * 180 / math.pi)
         cv2.putText(img, 'Head forward tilt in Degrees: ' + str(int(angle)), (70, 100), cv2.FONT_HERSHEY_PLAIN, 3,(0, 0, 255), 3)
+        if angle < -15:
+            playsound(sounds)
+
         if angle < Cutoff_backward:
             Nose_Chest_angle.append(Cutoff_backward)
         else:
@@ -109,19 +111,22 @@ while time.time() < run_time:
 
     if abs(angle1) > 10:
         cv2.putText(img, 'Off centre head angle: ' + str(int(angle1)), (70, 200), cv2.FONT_HERSHEY_PLAIN, 3, (0, 255, 0), 3)
+        playsound(sounds)
 
 
     # shoulders tilt:
     y1 = lmList[11][2] #left shoulder y position
     y2 = lmList[12][2] #right shoulder y position
     ST = pm.Shouldertilt(y1,y2)
-    print(ST)
     Spine_curvature.append(ST)
 
     if ST == -1:
         cv2.putText(img, 'Spine Curved Leftwards' , (70, 150), cv2.FONT_HERSHEY_PLAIN, 3,(0, 255, 0), 3)
+        playsound(sounds)
+
     elif ST == 1:
         cv2.putText(img, 'Spine Curved Rightwards', (70, 150), cv2.FONT_HERSHEY_PLAIN, 3, (0, 255, 0), 3)
+        playsound(sounds)
 
 
 
@@ -138,7 +143,6 @@ else:
     for i in range(int(duration/tick_spacing)):
         seconds.append((i+1)*tick_spacing)
 
-    print (len(ticks),len(seconds))
 
 
 

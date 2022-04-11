@@ -5,7 +5,7 @@ from WebPages import AT_page, Thesis_Page,GoodPosture_page,ML_Page
 
 with st.sidebar:
     selected = option_menu(
-        menu_title = ' SASA',
+        menu_title = '',
         options = ['Home','AT','Good Posture','ML','Thesis'],
         icons = ['house-fill','play-circle-fill','activity','cpu-fill','file-earmark-text-fill'],
         menu_icon = 'menu-button-wide-fill',
