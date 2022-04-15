@@ -6,6 +6,7 @@ import math
 from playsound import playsound
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 
 sounds = 'Sounds/DataScanner.wav'
 
@@ -215,6 +216,8 @@ def app():
 
             FRAME_WINDOW.image(img)
     else:
+
+        os.remove("CMD/Calibrate.jpg")
 
         tick_spacing = 30 # every 30 seconds
 

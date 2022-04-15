@@ -5,6 +5,8 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 from playsound import playsound
+import os
+
 
 
 camera = 1 # camera used ( 0 = native camera , 1 = added webcam)
@@ -135,6 +137,9 @@ while time.time() < run_time:
     cv2.waitKey(1)  # 1ms delay
 
 else:
+
+    os.remove("CMD/Calibrate.jpg")
+
     f = open('results.txt','w')
     f.write(str(Nose_Chest_angle))
     f.write('\n')
@@ -252,6 +257,8 @@ bad_posture_percentage = (x3 / len(Spine_curvature)) * 100
 F.write('Spinal curvature bad Posture: ' + str(bad_posture_percentage) + '%'+'\n')
 
 F.close()
+
+
 
 
 
