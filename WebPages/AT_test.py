@@ -2,6 +2,7 @@ import streamlit as st
 import cv2
 
 def app():
+    st.write("working")
     vf = cv2.VideoCapture(1)
 
     stframe = st.empty()
