@@ -59,10 +59,11 @@ while time.time() < run_time:
     Cutoff_forward = 60
     Cutoff_backward = -30
 
+
     if VD <= Nose_Chest_distance:
         angle = (math.acos(VD / Nose_Chest_distance)) * 180 / math.pi
         cv2.putText(img, 'Head forward tilt in Degrees: ' + str(int(angle)), (70, 100), cv2.FONT_HERSHEY_PLAIN, 3,(0, 0, 255), 3)
-        if angle > 30:
+        if angle > 20:
             playsound(sounds)
 
 
@@ -76,7 +77,7 @@ while time.time() < run_time:
     else:
         angle = -((math.acos(Nose_Chest_distance/VD)) * 180 / math.pi)
         cv2.putText(img, 'Head forward tilt in Degrees: ' + str(int(angle)), (70, 100), cv2.FONT_HERSHEY_PLAIN, 3,(0, 0, 255), 3)
-        if angle < -15:
+        if angle < -10:
             playsound(sounds)
 
         if angle < Cutoff_backward:
@@ -134,8 +135,49 @@ while time.time() < run_time:
     cv2.waitKey(1)  # 1ms delay
 
 else:
+    f = open('results.txt','w')
+    f.write(str(Nose_Chest_angle))
+    f.write('\n')
+    f.write('\n')
+    f.write('\n')
+    f.write('\n')
+    f.write(str(Spine_curvature))
+    f.write('\n')
+    f.write('\n')
+    f.write('\n')
+    f.write('\n')
+    f.write(str(OFF_centre_angle))
+    f.close()
 
-    tick_spacing = 30 # every 30 seconds
+    # Analysing the data
+
+    # Head forward tilt:
+
+    F = open('Posture.txt', 'w')
+    x1, x2, x3 = 0, 0, 0
+    for i in Nose_Chest_angle:
+        if int(i) >= 20:
+            x1 += 1
+        elif int(i) <= -10:
+            x1 += 1
+    bad_posture_percentage = (x1 / len(Nose_Chest_angle)) * 100
+    F.write('Forward Head tilt Bad posture: ' + str(bad_posture_percentage) + '%' + '\n')
+
+    for i in OFF_centre_angle:
+        if int(abs(i)) >= 10:
+            x2 += 1
+    bad_posture_percentage = (x2 / len(OFF_centre_angle)) * 100
+    F.write('Off Centre Bad Posture: ' + str(bad_posture_percentage) + '%' + '\n')
+
+    for i in OFF_centre_angle:
+        if int(abs(i)) == 1:
+            x3 += 1
+    bad_posture_percentage = (x3 / len(Spine_curvature)) * 100
+    F.write('Spinal curvature bad Posture: ' + str(bad_posture_percentage) + '%' + '\n')
+
+    F.close()
+
+    tick_spacing = 100 # every 30 seconds
     length = len(Nose_Chest_angle) # number of samples
     samplingRate = length/duration # duration in seconds
     ticks = np.arange(0, length, tick_spacing*int(samplingRate))
@@ -149,25 +191,25 @@ else:
 
     # plotting Neck angle
     plt.figure(1)
-    plt.title('Neck Forward Angle')
+    plt.title('Head Forward Angle')
     plt.plot(Nose_Chest_angle, color = 'b')
     plt.xticks( ticks , seconds)
     plt.xlim(xmin=0)
-    plt.axhline(y=15, color='g', linestyle='-',label='Upper Threshold')
-    plt.axhline(y=-15, color='y', linestyle='-',label='Lower Threshold')
+    plt.axhline(y=20, color='g', linestyle='-',label='Upper Threshold')
+    plt.axhline(y=-10, color='y', linestyle='-',label='Lower Threshold')
     plt.xlabel('Time(s)')
-    plt.ylabel('Neck tilt Angle (degrees)')
+    plt.ylabel('Head Angle (degrees)')
 
     #neck off centre angle
     plt.figure(2)
-    plt.title('Neck Off Centre Angle')
+    plt.title('Head Off-Centre Angle')
     plt.plot(OFF_centre_angle, color = 'b')
     plt.xticks( ticks , seconds)
     plt.xlim(xmin=0)
     plt.axhline(y=10, color='g', linestyle='-',label='Upper Threshold')
     plt.axhline(y=-10, color='y', linestyle='-',label='Lower Threshold')
     plt.xlabel('Time(s)')
-    plt.ylabel('Neck off centre Angle (degrees)')
+    plt.ylabel('Head Angle (degrees)')
 
     #Spine curvature
     plt.figure(3)
@@ -177,13 +219,45 @@ else:
     plt.yticks([-1,0,1],['L','N','R'])
     plt.xlim(xmin=0)
     plt.xlabel('Time(s)')
-    plt.ylabel('Spine curvature direction')
-
-
-
-
-
-
-
+    plt.ylabel('Spine curvature (direction)')
 
     plt.show()
+
+
+
+# Analysing the data
+
+# Head forward tilt:
+
+F = open('Posture.txt','w')
+x1,x2,x3 = 0,0,0
+for i in Nose_Chest_angle:
+    if int(i) >= 20:
+        x1+=1
+    elif int(i) <= -10:
+        x1+=1
+bad_posture_percentage = (x1/len(Nose_Chest_angle))*100
+F.write('Forward Head tilt Bad posture: ' + str(bad_posture_percentage)+'%'+'\n')
+
+for i in OFF_centre_angle:
+    if int(abs(i)) >= 10:
+        x2+=1
+bad_posture_percentage = (x2/len(OFF_centre_angle))*100
+F.write('Off Centre Bad Posture: ' + str(bad_posture_percentage)+'%'+'\n')
+
+for i in OFF_centre_angle:
+    if int(abs(i)) == 1:
+        x3 += 1
+bad_posture_percentage = (x3 / len(Spine_curvature)) * 100
+F.write('Spinal curvature bad Posture: ' + str(bad_posture_percentage) + '%'+'\n')
+
+F.close()
+
+
+
+
+
+
+
+
+
