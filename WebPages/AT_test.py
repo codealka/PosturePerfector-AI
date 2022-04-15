@@ -16,5 +16,6 @@ def app():
     while True:
         cap = load_camera()
         _, img = cap.read()
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
         FRAME_WINDOW.image(img)
