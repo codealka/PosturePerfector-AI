@@ -1,6 +1,6 @@
 import streamlit as st
 import streamlit_option_menu as OM
-from WebPages import AT_page, Thesis_Page,GoodPosture_page,ML_Page
+from WebPages import AT_page, Thesis_Page,GoodPosture_page,ML_Page, AT_test
 
 
 with st.sidebar:
@@ -25,4 +25,5 @@ if selected == 'ML':
     ML_Page.app()
 if selected == 'Thesis':
     Thesis_Page.app()
-
+if selected == 'AT_test':
+    AT_test.app()
