@@ -15,6 +15,8 @@ with st.sidebar:
 if selected == 'Home':
         st.title('Overview')
 
+        st.write("<web app still in progress>")
+
 if selected == 'AT Posture Correction':
     AT_page.app()
 if selected == 'Good Posture':
