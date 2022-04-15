@@ -1,6 +1,7 @@
 import streamlit as st
 import cv2
 
+
 def app():
     st.write("working")
     vf = cv2.VideoCapture(1)
@@ -11,6 +12,7 @@ def app():
         ret, frame = vf.read()
         # if frame is read correctly ret is True
         if not ret:
+            st.write("not")
             print("Can't receive frame (stream end?). Exiting ...")
             break
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
