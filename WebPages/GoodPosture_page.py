@@ -1,4 +1,6 @@
 import  streamlit as st
 
 def app():
-    st.title("GOOD POSTURE PAGE")
+    st.title("Good Posture Habits")
+
+    st.write("web app still in progress")
