@@ -1,7 +1,7 @@
 streamlit
 streamlit_option_menu
 numpy
-opencv-python
+opencv-python==4.5.5.62
 matplotlib
 playsound
 
