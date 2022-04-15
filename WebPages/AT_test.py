@@ -1,24 +1,15 @@
-import streamlit as st
-import cv2
+from streamlit_webrtc import webrtc_streamer
+import av
 
 
-def app():
+class VideoProcessor:
+    def recv(self, frame):
+        img = frame.to_ndarray(format="bgr24")
 
-    @st.cache(allow_output_mutation=True)
-    def load_camera():
+        flipped = img[::-1,:,:]
 
-        CAMERA_FLAG = 1
-        camera = cv2.VideoCapture(CAMERA_FLAG)
-
-        return camera
+        return av.VideoFrame.from_ndarray(flipped, format="bgr24")
 
 
+webrtc_streamer(key="example", video_processor_factory=VideoProcessor)
 
-    FRAME_WINDOW = st.image([])
-    cap = load_camera()
-    while True:
-        _, img = cap.read()
-        st.write('img')
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-
-        FRAME_WINDOW.image(img)
