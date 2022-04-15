@@ -217,7 +217,6 @@ def app():
             FRAME_WINDOW.image(img)
     else:
 
-        os.remove("CMD/Calibrate.jpg")
 
         tick_spacing = 30 # every 30 seconds
 
@@ -285,4 +284,5 @@ def app():
             plt.ylabel('Slouching')
             st.pyplot(fig4)
 
+            os.remove("Calibrate.jpg")
 
