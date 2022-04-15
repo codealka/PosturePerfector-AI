@@ -1,8 +1,9 @@
 streamlit
 streamlit_option_menu
-opencv-python
+numpy
+opencv-python-headless
 matplotlib
 playsound
-numpy
+
 
 
