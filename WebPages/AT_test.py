@@ -4,7 +4,7 @@ import cv2
 
 def app():
 
-    @st.cache(allow_output_mutation=True)
+    @st.cache()
     def load_camera():
         CAMERA_FLAG = 1
         camera = cv2.VideoCapture(CAMERA_FLAG)
