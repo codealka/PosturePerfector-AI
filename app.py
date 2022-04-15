@@ -1,10 +1,10 @@
 import streamlit as st
-import streamlit_option_menu as stt
+from streamlit_option_menu import option_menu
 from WebPages import AT_page, Thesis_Page,GoodPosture_page,ML_Page
 
 
 with st.sidebar:
-    selected = stt.option_menu(
+    selected = option_menu(
         menu_title = '',
         options = ['Home','AT Posture Correction','Good Posture','ML','Thesis'],
         icons = ['house-fill','play-circle-fill','activity','cpu-fill','file-earmark-text-fill'],
