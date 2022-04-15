@@ -25,4 +25,4 @@ if selected == 'ML':
     ML_Page.app()
 if selected == 'Thesis':
     Thesis_Page.app()
-print(Done)
+
