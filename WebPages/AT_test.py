@@ -3,7 +3,20 @@ import cv2
 
 
 def app():
-    st.write("working")
+
+    st.title("Postural Imaging System for Back Pain Sufferers")
+
+    option = st.selectbox(
+         'Video input medium',
+         ('Device Native Camera', 'Additional Webcam'))
+
+    st.write('You selected:', option)
+
+    if option == 'Device Native Camera':
+            camera = 0 # camera used ( 0 = native camera , 1 = added webcam)
+    else:
+            camera = 1
+
     vf = cv2.VideoCapture(1)
 
     stframe = st.empty()
