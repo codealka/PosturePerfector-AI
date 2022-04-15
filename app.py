@@ -6,8 +6,8 @@ from WebPages import AT_page, Thesis_Page,GoodPosture_page,ML_Page, AT_test
 with st.sidebar:
     selected = OM.option_menu(
         menu_title = '',
-        options = ['Home','AT Posture Correction','Good Posture','ML','Thesis'],
-        icons = ['house-fill','play-circle-fill','activity','cpu-fill','file-earmark-text-fill'],
+        options = ['Home','AT Posture Correction','Good Posture','ML','Thesis','AT_test'],
+        icons = ['house-fill','play-circle-fill','activity','cpu-fill','file-earmark-text-fill','play-circle-fill'],
         menu_icon = 'menu-button-wide-fill',
         default_index = 0
     )
