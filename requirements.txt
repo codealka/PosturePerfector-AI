@@ -1,7 +1,7 @@
 streamlit
 streamlit_option_menu
 numpy
-opencv-python
+opencv-python-headless
 playsound
 matplotlib
 mediapipe
